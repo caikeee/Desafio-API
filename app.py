@@ -1,6 +1,7 @@
 # com essas duas bibliotecas posso fazer a API, a primeira me permite fazer as chamadas na API e tambem converte para o formato JSON, a segunda me permite utilizar SQL
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import sqlite3
 
 # Cria a instância da aplicação Flask
 app = Flask(__name__)
