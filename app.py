@@ -1,14 +1,25 @@
-# com essas duas bibliotecas posso fazer a API, a primeira me permite fazer as chamadas na API e tambem converte para o formato JSON, a segunda me permite utilizar SQL
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-import sqlite3
+import os
 
 # Cria a instância da aplicação Flask
 app = Flask(__name__)
+
+# # Define o caminho do banco de dados na pasta 'desafio_api'
+# base_dir = os.path.abspath(os.path.dirname(__file__))
+# db_path = os.path.join(base_dir, 'Desafio API', 'esportes.db')
+
+
+# Define o caminho do banco de dados na pasta 'desafio_api'
+base_dir = os.path.abspath(os.path.dirname(__file__))
+db_path = os.path.join(base_dir, 'esportes.db')
+
 # Configura o banco de dados que vou usar
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///esportes.db'
-# Desativa o rastreamento de modificações do SQLAlchemy para economizar recursos(Preciso estudar mais sobre isso!)
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+
+# Exemplo de configuração adicional
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 # Cria a instância do SQLAlchemy com o Flask
 db = SQLAlchemy(app)
 
@@ -26,11 +37,9 @@ with app.app_context():
     db.create_all()
 
 # Rota para listar todas as atividades
-@app.route('/atividades', methods=['GET'])#método usado para obter dados
-def obter_atividades():# quando chamar o metodo vai ativar essa função
-    atividades = Atividade.query.all()# consulta todo o banco de dados
-
-# criamos uma lista e com o FOR define que para cada atividade da lista Atividades a gente vai pegar os dados que são um dicionario e colocar na nossa lista( Estudar mais sobre como isso funciona!!)
+@app.route('/atividades', methods=['GET'])
+def obter_atividades():
+    atividades = Atividade.query.all()
     return jsonify([{
         'id': atividade.id,
         'nome': atividade.nome,
@@ -40,8 +49,7 @@ def obter_atividades():# quando chamar o metodo vai ativar essa função
         'esforço': atividade.esforço
     } for atividade in atividades])
 
-# Rota para obter uma atividade por ID, mesma coisa que a ultima porem para uma unica atividade da lista Atividades
-
+# Rota para obter uma atividade por ID
 @app.route('/atividades/<int:id>', methods=['GET'])
 def obter_atividade(id):
     atividade = Atividade.query.get(id)
@@ -83,6 +91,6 @@ def deletar_atividade(id):
 
 # Inicializa o servidor Flask
 if __name__ == '__main__':
+    # Imprimir o caminho absoluto do banco de dados
+    print(f"Banco de dados localizado em: {db_path}")
     app.run(debug=True)
-
-
