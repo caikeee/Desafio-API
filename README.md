@@ -1,9 +1,8 @@
-Documentação do Projeto - Desafio API
 
-Introdução
+
+
 Este projeto é uma API Flask para gerenciar esportes, ele utiliza SQLite como banco de dados para armazenar informações.
 
-Instalação
 Siga os passos abaixo para instalar e configurar o projeto:
 
 Clone o repositório:
